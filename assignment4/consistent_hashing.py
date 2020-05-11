@@ -3,7 +3,7 @@ from hashlib import md5
 
 class NodeRing():
     
-    def __init__(self, nodes, num_replicas = 2 ):
+    def __init__(self, nodes, num_replicas = 3 ):
      
         replicas = generate_replicas(nodes, num_replicas)
         hash_replicas = [hash(replica) for replica in replicas]
@@ -20,7 +20,21 @@ class NodeRing():
         if pos == len(self.hash_replicas):
             return self.replicas_map[self.hash_replicas[0]]
         else:
-            return str(self.replicas_map[self.hash_replicas[pos]])+" (virtual node)"
+            return self.replicas_map[self.hash_replicas[pos]]
+
+   
+def replicate_data(server):    
+
+ x = server.split('.')
+ num = int(x[3])
+ if num < 3:
+     num += 1
+ else:
+     num = 1
+
+ next_server = x[0]+ '.' + x[1]+ '.' + x[2] + '.' + str(num)
+
+ return next_server
 
 
 
@@ -36,7 +50,6 @@ def hash(value):
     m = md5(value.encode('utf-8'))
     return int(m.hexdigest(), 16)
 
- 
 
 
 def test():
@@ -47,7 +60,7 @@ def test():
 
  for i in data:
 
-  print (str(i) + " is sharded to server " + str(ring.get_node(i)))
+  print (str(i) + " is sharded to server " + str(ring.get_node(i)) +", " + "replicated to server "  + (replicate_data(ring.get_node(i))))
 
 
 
