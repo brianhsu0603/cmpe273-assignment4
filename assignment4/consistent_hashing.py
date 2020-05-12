@@ -23,11 +23,11 @@ class NodeRing():
             return self.replicas_map[self.hash_replicas[pos]]
 
    
-def replicate_data(server):    
+def replicate_data(server,length): 
 
  x = server.split('.')
  num = int(x[3])
- if num < 3:
+ if num < length:
      num += 1
  else:
      num = 1
@@ -60,10 +60,8 @@ def test():
 
  for i in data:
 
-  print (str(i) + " is sharded to server " + str(ring.get_node(i)) +", " + "replicated to server "  + (replicate_data(ring.get_node(i))))
+  print (str(i) + " is sharded to server " + str(ring.get_node(i)) +", " + "replicated to server "  + (replicate_data(ring.get_node(i),len(nodes))))
 
 
 
-   
-  
 test()
