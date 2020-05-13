@@ -3,7 +3,7 @@ from hashlib import md5
 
 class NodeRing():
     
-    def __init__(self, nodes, num_replicas = 3 ):
+    def __init__(self, nodes, num_replicas = 2 ):
      
         replicas = generate_replicas(nodes, num_replicas)
         hash_replicas = [hash(replica) for replica in replicas]
